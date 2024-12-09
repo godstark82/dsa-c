@@ -106,7 +106,12 @@ void printLinkedList(Node *head)
 int main()
 {
     Node *head = createLinkedList(1);
-     insertBegining(head, 0);
+    head = insertBegining(head, 0);
+    head = insertAtLast(head, 2);
+    head = insertAtLast(head, 3);
+    head = insertAtLast(head, 4);
+    head = deleteFromBeg(head);
+    head = deleteLast(head);
     printLinkedList(head);
     return 0;
 }
