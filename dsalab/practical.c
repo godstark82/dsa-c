@@ -93,3 +93,279 @@ int runningComparison(int a[], int b[], int n)
 
     return bothHappyCount;
 }
+
+//!
+//!     SORTING
+//!
+
+//! BubbleSort
+void bubbleSort(int a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (a[j] > a[j + 1])
+            {
+                int temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+//! Selection Sort
+void selectionSort(int a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int minIndex = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (a[j] < a[minIndex])
+            {
+                minIndex = j;
+            }
+        }
+        int temp = a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = temp;
+    }
+}
+
+//! Insertion Sort
+void insertionSort(int a[], int n)
+{
+    for (int i = 1; i < n; i++)
+    {
+        int key = a[i];
+        int j = i - 1;
+        while (j >= 0 && a[j] > key)
+        {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}
+
+//! Fibonacci Series
+int fibonacciSeries(int n)
+{
+    if (n <= 1)
+        return n;
+    return fibonacciSeries(n - 1) + fibonacciSeries(n - 2);
+}
+
+//! Factorial
+int factorial(int n)
+{
+    if (n == 0 || n == 1)
+        return 1;
+    return n * factorial(n - 1);
+}
+
+//! Linked List
+struct LLNode
+{
+    int data;
+    struct LLNode *next;
+};
+
+//! Insertion in Linked List
+struct LLNode *insertAtHead(struct LLNode *head, int data)
+{
+    struct LLNode *newNode = (struct LLNode *)malloc(sizeof(struct LLNode));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (head == NULL)
+    {
+        head = newNode;
+        return head;
+    }
+
+    newNode->next = head;
+    head = newNode;
+
+    return head;
+}
+
+//! Insertion at Tail
+struct LLNode *insertAtTail(struct LLNode *head, int data)
+{
+    struct LLNode *newNode = (struct LLNode *)malloc(sizeof(struct LLNode));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (head == NULL)
+    {
+        head = newNode;
+        return head;
+    }
+
+    struct LLNode *temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    return head;
+}
+
+//! Deletion in first
+struct LLNode *deleteFirst(struct LLNode *head)
+{
+    if (head == NULL)
+        return NULL;
+    struct LLNode *temp = head;
+    head = head->next;
+    free(temp);
+    return head;
+}
+
+//! Deletion in last
+struct LLNode *deleteLast(struct LLNode *head)
+{
+    if (head == NULL)
+        return NULL;
+    struct LLNode *temp = head;
+    while (temp->next->next != NULL)
+    {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = NULL;
+    return head;
+}
+
+//! Binary Search Tree
+struct BSTNode
+{
+    int data;
+    struct BSTNode *left;
+    struct BSTNode *right;
+};
+
+//! PreOrder
+void preOrder(struct BSTNode *root)
+{
+    if (root == NULL)
+        return;
+    printf("%d ", root->data);
+    preOrder(root->left);
+    preOrder(root->right);
+}
+
+//! InOrder
+void inOrder(struct BSTNode *root)
+{
+    if (root == NULL)
+        return;
+    inOrder(root->left);
+    printf("%d ", root->data);
+    inOrder(root->right);
+}
+
+//! PostOrder
+void postOrder(struct BSTNode *root)
+{
+    if (root == NULL)
+        return;
+    postOrder(root->left);
+    postOrder(root->right);
+    printf("%d ", root->data);
+}
+
+//! Height of BST
+int heightOfBST(struct BSTNode *root)
+{
+    if (root == NULL)
+        return 0;
+    return 1 + max(heightOfBST(root->left), heightOfBST(root->right));
+}
+
+//! Search in BST
+struct BSTNode *searchInBST(struct BSTNode *root, int data)
+{
+    if (root == NULL)
+        return NULL;
+    if (root->data == data)
+        return root;
+    if (data < root->data)
+        return searchInBST(root->left, data);
+    return searchInBST(root->right, data);
+}
+
+//! **** Binary Search Tree from PreOrder only
+struct BSTNode *constructBSTFromPreOrderUtil(int preOrder[], int *preIndex, int key, int min, int max, int n) {
+    if (*preIndex >= n)
+        return NULL;
+        
+    struct BSTNode *root = NULL;
+    
+    if (key > min && key < max) {
+        root = (struct BSTNode *)malloc(sizeof(struct BSTNode));
+        root->data = key;
+        root->left = NULL;
+        root->right = NULL;
+        
+        *preIndex = *preIndex + 1;
+        
+        if (*preIndex < n) {
+            root->left = constructBSTFromPreOrderUtil(preOrder, preIndex, preOrder[*preIndex], min, key, n);
+        }
+        if (*preIndex < n) {
+            root->right = constructBSTFromPreOrderUtil(preOrder, preIndex, preOrder[*preIndex], key, max, n);
+        }
+    }
+    
+    return root;
+}
+
+struct BSTNode *constructBSTFromPreOrder(int preOrder[], int n) {
+    if (n == 0) return NULL;
+    int preIndex = 0;
+    return constructBSTFromPreOrderUtil(preOrder, &preIndex, preOrder[0], INT_MIN, INT_MAX, n);
+}
+
+
+//! Print the number of direct neighbours of each node in a graph using adjacency matrix
+void printDirectNeighbours(int n, int adjMatrix[][n]) // Fixed parameter order and array syntax
+{
+    if (n <= 0) return; // Input validation
+    
+    for (int i = 0; i < n; i++)
+    {
+        int count = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (adjMatrix[i][j] == 1)
+                count++;
+        }
+        printf("Node %d has %d neighbours\n", i, count);
+    }
+}
+
+//! Print the number of direct neighbours using adjacency list
+void printDirectNeighboursAdjList(int n, struct Node* adjList[]) 
+{
+    if (n <= 0 || adjList == NULL) return;
+
+    for (int i = 0; i < n; i++)
+    {
+        int count = 0;
+        struct Node* temp = adjList[i];
+        while (temp != NULL)
+        {
+            count++;
+            temp = temp->next;
+        }
+        printf("Node %d has %d neighbours\n", i, count);
+    }
+}
+
+
+//* ------- END OF PRACTICALS ------- */
+
